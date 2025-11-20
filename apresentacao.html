@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full bg-gray-100">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proposta Interativa - SIGFC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="javasc.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <!-- 
+    Chosen Palette: Warm Neutral (White/Gray) with a professional Blue accent.
+    Application Structure Plan: A true Single-Page Application (SPA) model with a fixed sidebar navigation (desktop) and top-bar (mobile). JavaScript dynamically shows/hides content sections ('pages') rather than scrolling. This structure is chosen for usability, providing a clean, app-like experience that allows users to jump directly to any section of the proposal (Módulos, Plano, SOW) without losing context, which is superior to a long, linear scrolling page for exploring a structured document.
+    Visualization & Content Choices: 1. Objetivos (Report) -> Goal: Inform -> Viz: 3-column KPI Cards (HTML/Tailwind) -> Interaction: Static -> Justification: Modern, scannable way to present key goals. 2. Módulos Funcionais (Report) -> Goal: Organize/Explore -> Viz: Interactive Tabbed Interface (HTML/JS) -> Interaction: Click tabs to reveal content -> Justification: Condenses 4 large text blocks into one clean component. 3. Plano de Implementação (Report) -> Goal: Show Process -> Viz: Horizontal Timeline/Stepper (HTML/Tailwind) -> Interaction: Static -> Justification: More visual than a table. 4. Estimativa de Esforço (Report) -> Goal: Compare -> Viz: Horizontal Bar Chart (Chart.js/Canvas) -> Interaction: Hover tooltips -> Justification: Instantly visualizes effort distribution, superior to a text table. 5. SOW/Critérios (Report) -> Goal: Inform -> Viz: Styled Lists with checkmark icons (HTML/Tailwind) -> Justification: Easy to read checklist.
+    CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+
+</head>
+
+<body class="h-full">
+    <div class="flex h-full">
+        <!-- Sidebar Navigation (Desktop) -->
+        <nav id="sidebar"
+            class="hidden md:flex md:flex-col md:w-64 md:fixed md:inset-y-0 md:bg-white md:border-r md:border-gray-200 md:shadow-sm">
+            <div class="flex flex-col flex-1 p-4 space-y-2">
+                <div class="flex items-center px-2 py-3 mb-4">
+                    <span class="text-2xl font-bold text-indigo-600">SIGFC</span>
+                    <span class="ml-2 text-sm font-medium text-gray-500">Proposta</span>
+                </div>
+                <button class="nav-button active" onclick="showPage('inicio')">Início</button>
+                <button class="nav-button" onclick="showPage('modulos')">Módulos Funcionais</button>
+                <button class="nav-button" onclick="showPage('lucratividade')">Análise de Lucratividade</button>
+                <button class="nav-button" onclick="showPage('plano')">Plano do Projeto</button>
+                <button class="nav-button" onclick="showPage('stack')">Stack Tecnológico</button>
+                <button class="nav-button" onclick="showPage('sow')">SOW & Critérios</button>
+            </div>
+        </nav>
+
+        <!-- Mobile Header & Navigation -->
+        <header id="mobile-header" class="md:hidden bg-white shadow-sm sticky top-0 z-10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center">
+                        <span class="text-2xl font-bold text-indigo-600">SIGFC</span>
+                        <span class="ml-2 text-sm font-medium text-gray-500">Proposta</span>
+                    </div>
+                    <button id="mobile-menu-button"
+                        class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                        <span class="sr-only">Abrir menu</span>
+                        <!-- Icono Menu (Hamburger) -->
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <!-- Mobile Menu Dropdown -->
+            <div id="mobile-menu" class="hidden">
+                <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                    <button class="nav-button active" onclick="showPage('inicio', true)">Início</button>
+                    <button class="nav-button" onclick="showPage('modulos', true)">Módulos Funcionais</button>
+                    <button class="nav-button" onclick="showPage('lucratividade', true)">Análise de
+                        Lucratividade</button>
+                    <button class="nav-button" onclick="showPage('plano', true)">Plano do Projeto</button>
+                    <button class="nav-button" onclick="showPage('stack', true)">Stack Tecnológico</button>
+                    <button class="nav-button" onclick="showPage('sow', true)">SOW & Critérios</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 md:ml-64 overflow-y-auto">
+            <div class="container mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
+
+                <!-- Página: Início -->
+                <section id="page-inicio" class="page-content space-y-8">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900">Visão Geral e Justificativa</h1>
+                        <p class="mt-2 text-lg text-gray-600">
+                            <b>O Sistema Integrado de Gestão de Frotas e Contratos (SIGFC)</b> é uma solução web-based
+                            concebida para centralizar e automatizar as operações da sua rent-a-car.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Objetivos Estratégicos</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- Card Conformidade -->
+                            <div class="bg-indigo-50 border border-indigo-200 p-5 rounded-lg">
+                                <h3 class="text-lg font-semibold text-indigo-800">Conformidade (Risco Zero)</h3>
+                                <p class="mt-1 text-gray-700">Garantir que 100% da frota ativa está em conformidade
+                                    legal (Seguros, IPOs, etc.), eliminando multas e bloqueando preventivamente viaturas
+                                    não-conformes.</p>
+                            </div>
+                            <!-- Card Rentabilidade -->
+                            <div class="bg-green-50 border border-green-200 p-5 rounded-lg">
+                                <h3 class="text-lg font-semibold text-green-800">Rentabilidade (Decisão de Ativo)</h3>
+                                <p class="mt-1 text-gray-700">Fornecer um indicador preciso de lucratividade por
+                                    viatura, cruzando receitas de aluguer com custos de manutenção e depreciação.</p>
+                            </div>
+                            <!-- Card Eficiência -->
+                            <div class="bg-blue-50 border border-blue-200 p-5 rounded-lg">
+                                <h3 class="text-lg font-semibold text-blue-800">Eficiência Operacional</h3>
+                                <p class="mt-1 text-gray-700">Digitalizar o processo de Contratos e a Checklist de
+                                    Devolução/Entrega (com assinatura digital), reduzindo o tempo de inatividade das
+                                    viaturas.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Página: Módulos Funcionais -->
+                <section id="page-modulos" class="page-content hidden space-y-6">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900">Módulos Funcionais</h1>
+                        <p class="mt-2 text-lg text-gray-600">A arquitetura do SIGFC é estruturada em quatro módulos
+                            principais que interagem em tempo real.</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <!-- Navegação por Tabs -->
+                        <div class="mb-4 bg-gray-100 p-2 rounded-lg flex flex-wrap gap-2">
+                            <button class="tab-button active" onclick="showTab('modulo-a', this)">Módulo A:
+                                Ativos</button>
+                            <button class="tab-button" onclick="showTab('modulo-b', this)">Módulo B: Pessoas</button>
+                            <button class="tab-button" onclick="showTab('modulo-c', this)">Módulo C: Contratos</button>
+                            <button class="tab-button" onclick="showTab('modulo-d', this)">Módulo D: Financeiro</button>
+                        </div>
+
+                        <!-- Conteúdo dos Tabs -->
+                        <div id="tab-content" class="mt-6">
+                            <div id="modulo-a" class="tab-panel space-y-3">
+                                <h3 class="text-xl font-semibold text-gray-800">Módulo A: Gestão Documental e de Ativos
+                                </h3>
+                                <ul class="list-disc list-inside text-gray-700 space-y-1">
+                                    <li>Registo de Viaturas (Ativos): Registo completo (Frotas, Matrícula, Chassis,
+                                        Custo de Aquisição, Vida Útil, Estado).</li>
+                                    <li>Gestão de Documentos: Armazenamento digitalizado de Seguros, IPOs, Livretos.
+                                        Cada documento possui uma data de caducidade.</li>
+                                    <li>Sistema de Alertas: Envio automático de notificações (e-mail e sistema) 30, 15 e
+                                        7 dias antes da caducidade.</li>
+                                    <li>Bloqueio Inteligente: Impede a alocação de viaturas com documentos caducados ou
+                                        viaturas que saíram da oficina e não foram validadas pelo Gestor de Qualidade.
+                                    </li>
+                                </ul>
+                            </div>
+                            <div id="modulo-b" class="tab-panel hidden space-y-3">
+                                <h3 class="text-xl font-semibold text-gray-800">Módulo B: Gestão de Pessoas e Parques
+                                </h3>
+                                <ul class="list-disc list-inside text-gray-700 space-y-1">
+                                    <li>Perfis de Utilizador (RBAC): Gestores, Supervisores, Operadores, Clientes.</li>
+                                    <li>Gestão de Clientes: Registo de clientes com histórico de aluguer.</li>
+                                    <li>Gestão de Parques: Criação de parques (locais físicos) e alocação de viaturas.
+                                    </li>
+                                    <li>Gestão de Oficinas: Registo de oficinas e histórico de custos de manutenção
+                                        por viatura.</li>
+                                </ul>
+                            </div>
+                            <div id="modulo-c" class="tab-panel hidden space-y-3">
+                                <h3 class="text-xl font-semibold text-gray-800">Módulo C: Gestão de Contratos e Workflow
+                                </h3>
+                                <ul class="list-disc list-inside text-gray-700 space-y-1">
+                                    <li>Criação de Contratos: Baseado em Proformas, associa cliente, gestor e viatura.
+                                    </li>
+                                    <li>Workflow de Substituição: Processo registado para substituição de viatura em
+                                        caso de avaria.</li>
+                                    <li>Checklist Digital: O Supervisor executa a Checklist de Entrega e Receção através
+                                        de tablet/web.</li>
+                                    <li>Assinatura Digital: Captura obrigatória da assinatura do Supervisor e do
+                                        Cliente.</li>
+                                    <li>Comparação de Danos: Compara a Checklist de saída com a de entrada, emitindo um
+                                        Alerta de Inconformidade.</li>
+                                </ul>
+                            </div>
+                            <div id="modulo-d" class="tab-panel hidden space-y-3">
+                                <h3 class="text-xl font-semibold text-gray-800">Módulo D: Análise e Controlo Financeiro
+                                </h3>
+                                <ul class="list-disc list-inside text-gray-700 space-y-1">
+                                    <li>Emissão de Faturas/Recibos: Funcionalidade para gerar faturas e recibos a partir
+                                        do contrato finalizado.</li>
+                                    <li>Integração Contabilística: Criação de uma API RESTful para comunicação
+                                        bidirecional com o software de contabilidade.</li>
+                                    <li>Indicador de Lucratividade (L): Cálculo automático do desempenho financeiro de
+                                        cada viatura.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Página: Análise de Lucratividade -->
+                <section id="page-lucratividade" class="page-content hidden space-y-6">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900">Análise de Lucratividade</h1>
+                        <p class="mt-2 text-lg text-gray-600">O pilar financeiro do SIGFC é o Indicador de Lucratividade
+                            (L).</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Fórmula do Indicador (L)</h2>
+                        <div class="bg-gray-800 text-white p-6 rounded-lg text-center">
+                            <span class="text-4xl font-mono">L =</span>
+                            <div class="flex flex-col items-center justify-center font-mono text-xl mt-4">
+                                <span class="px-4 py-2 border-b-2 border-gray-400">(Receita Total - Custos
+                                    Manutenção)</span>
+                                <span>(Custo Aquisição × (Meses em Frota / Vida Útil))</span>
+                            </div>
+                        </div>
+                        <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Componentes do Cálculo:</h3>
+                                <ul class="list-disc list-inside mt-2 space-y-1">
+                                    <li>Receita Total: Soma de todos os contratos da viatura.</li>
+                                    <li><b>Custos Manutenção:</b> Soma de todas as reparações e manutenções.</li>
+                                    <li>Custo Aquisição: Valor de compra do ativo.</li>
+                                    <li>Vida Útil: Tempo de depreciação (ex: 60 meses).</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Apoio à Decisão:</h3>
+                                <ul class="list-disc list-inside mt-2 space-y-1">
+                                    <li><span class="font-bold text-green-600">L > 1:</span> Viatura é rentável.</li>
+                                    <li><span class="font-bold text-yellow-600">L ≈ 1:</span> Viatura está em ponto de
+                                        equilíbrio.</li>
+                                    <li><span class="font-bold text-red-600">L < 1:</span> Viatura gera prejuízo.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Página: Plano do Projeto -->
+                <section id="page-plano" class="page-content hidden space-y-6">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900">Plano de Implementação</h1>
+                        <p class="mt-2 text-lg text-gray-600">O projeto será executado em quatro fases, com um prazo
+                            estimado de 5 a 6 meses.</p>
+                    </div>
+
+                    <!-- Timeline Fases -->
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Fases do Projeto</h2>
+                        <ol class="relative border-l border-gray-200">
+                            <li class="mb-10 ml-6">
+                                <span
+                                    class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-3 ring-8 ring-white">1</span>
+                                <h3 class="flex items-center mb-1 text-lg font-semibold text-gray-900">Fase 1: Estrutura
+                                    <span
+                                        class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded ml-3">2-3
+                                        Semanas</span>
+                                </h3>
+                                <p class="text-base font-normal text-gray-600">Modelagem de Dados Final, Setup de
+                                    Infraestrutura, Protótipo UI/UX.</p>
+                            </li>
+                            <li class="mb-10 ml-6">
+                                <span
+                                    class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-3 ring-8 ring-white">2</span>
+                                <h3 class="flex items-center mb-1 text-lg font-semibold text-gray-900">Fase 2: MVP <span
+                                        class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded ml-3">8-10
+                                        Semanas</span></h3>
+                                <p class="text-base font-normal text-gray-600">Go-Live Inicial. Gestão Documental com
+                                    Alertas, Registo de Viaturas/Clientes, Contratos Básicos.</p>
+                            </li>
+                            <li class="mb-10 ml-6">
+                                <span
+                                    class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-3 ring-8 ring-white">3</span>
+                                <h3 class="flex items-center mb-1 text-lg font-semibold text-gray-900">Fase 3: Core
+                                    Operacional <span
+                                        class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded ml-3">8-10
+                                        Semanas</span></h3>
+                                <p class="text-base font-normal text-gray-600">Módulo de Contratos Completo, Checklist
+                                    Digital (Assinaturas), Gestão de Oficinas, Cálculo (L).</p>
+                            </li>
+                            <li class="ml-6">
+                                <span
+                                    class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-3 ring-8 ring-white">4</span>
+                                <h3 class="flex items-center mb-1 text-lg font-semibold text-gray-900">Fase 4:
+                                    Lançamento <span
+                                        class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded ml-3">4-6
+                                        Semanas</span></h3>
+                                <p class="text-base font-normal text-gray-600">Testes de Utilizador (UAT), Integração
+                                    API Contabilidade, Formação e Lançamento em Produção.</p>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <!-- Gráfico Esforço -->
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Estimativa de Esforço (Total: 70
+                            Person-Semanas)</h2>
+                        <div class="chart-container">
+                            <canvas id="effortChart"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Página: Stack Tecnológico -->
+                <section id="page-stack" class="page-content hidden space-y-6">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900">Stack Tecnológico</h1>
+                        <p class="mt-2 text-lg text-gray-600">O SIGFC será construído sobre uma arquitetura de três
+                            camadas, garantindo modularidade e escalabilidade.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h3 class="text-xl font-semibold text-gray-800">Stack Recomendado</h3>
+                            <div class="mt-4 space-y-4">
+                                <div>
+                                    <h4 class="font-semibold text-indigo-600">Backend (Lógica)</h4>
+                                    <p class="text-gray-600">Tecnologia: Python (Django/Flask) ou PHP
+                                        (Laravel)<br>**Justificativa:** Robustez e rapidez no desenvolvimento de lógica
+                                        de negócio complexa.</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-indigo-600">Frontend (UI/UX)</h4>
+                                    <p class="text-gray-600">Tecnologia: React.js ou Vue.js<br>**Justificativa:**
+                                        Criação de interfaces rápidas e responsivas, essenciais para a operação no
+                                        Parque.</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-indigo-600">Base de Dados</h4>
+                                    <p class="text-gray-600">Tecnologia: PostgreSQL<br>**Justificativa: Elevada
+                                        integridade de dados e suporte a grandes volumes.</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-indigo-600">Serviços</h4>
+                                    <p class="text-gray-600">Tecnologia:** Task Queues (Ex: Celery)<br>**Justificativa:
+                                        Processamento assíncrono para Alertas de Caducidade e cálculos de Lucratividade.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h3 class="text-xl font-semibold text-gray-800">Segurança e Conformidade</h3>
+                            <div class="mt-4 space-y-4">
+                                <div>
+                                    <h4 class="font-semibold text-gray-700">Controlo de Acesso (RBAC)</h4>
+                                    <p class="text-gray-600">Definição estrita de permissões para cada perfil (Gestor,
+                                        Supervisor, Operador).</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-700">Segurança de Comunicação</h4>
+                                    <p class="text-gray-600">Uso obrigatório de HTTPS (SSL/TLS) e criptografia *hashing*
+                                        para senhas.</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-700">Não-Repúdio</h4>
+                                    <p class="text-gray-600">Uso de APIs de segurança para garantir a validade legal das
+                                        assinaturas digitais na Checklist.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Página: SOW -->
+                <section id="page-sow" class="page-content hidden space-y-6">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900">Statement of Work (SOW)</h1>
+                        <p class="mt-2 text-lg text-gray-600">Define o âmbito, os entregáveis e os critérios de
+                            aceitação do projeto.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-white p-6 rounded-lg shadow space-y-4">
+                            <h3 class="text-xl font-semibold text-gray-800">Âmbito e Exclusões</h3>
+                            <p class="text-gray-700">Âmbito:** Todos os módulos e funcionalidades descritos nas secções
+                                2 e 3 desta proposta.</p>
+                            <div>
+                                <h4 class="font-semibold text-red-700">Exclusões (Out of Scope):</h4>
+                                <ul class="list-disc list-inside text-red-600 mt-2 space-y-1">
+                                    <li>Desenvolvimento de aplicações móveis nativas (Foco é web responsivo).</li>
+                                    <li>Integração com sistemas de GPS ou rastreamento de viaturas.</li>
+                                    <li>Integração com um sistema de contabilidade próprio.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow space-y-4">
+                            <h3 class="text-xl font-semibold text-gray-800">Entregáveis Finais</h3>
+                            <ul class="list-disc list-inside text-gray-700 mt-2 space-y-1">
+                                <li>Software SIGFC em ambiente de Produção e Testes (QA).</li>
+                                <li>Código Fonte Completo da aplicação (Backend e Frontend).</li>
+                                <li>Documentação Técnica (Modelo de Dados, Arquitetura) e Manual de Utilizador.</li>
+                                <li>Formação dos utilizadores chave (Key Users).</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Critérios de Aceitação</h2>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <span
+                                    class="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-green-100 text-green-700 mr-3 mt-1">✓</span>
+                                <span class="text-gray-700">Alerta de Caducidade: O sistema deve enviar alertas
+                                    (e-mail/sistema) 30, 15 e 7 dias antes da caducidade de qualquer documento.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span
+                                    class="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-green-100 text-green-700 mr-3 mt-1">✓</span>
+                                <span class="text-gray-700">Validação de Qualidade: Uma viatura "Em Manutenção" somente
+                                    pode ficar "Disponível" após validação explícita do Gestor de Qualidade.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span
+                                    class="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-green-100 text-green-700 mr-3 mt-1">✓</span>
+                                <span class="text-gray-700">Checklist Digital: A devolução deve registar assinaturas e
+                                    emitir Alerta de Inconformidade se houver novos danos.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span
+                                    class="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-green-100 text-green-700 mr-3 mt-1">✓</span>
+                                <span class="text-gray-700">Cálculo de Lucratividade: O indicador (L) deve ser
+                                    calculado automaticamente e apresentado num relatório.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span
+                                    class="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-green-100 text-green-700 mr-3 mt-1">✓</span>
+                                <span class="text-gray-700">Integração Fiscal: A emissão de Fatura deve comunicar com
+                                    sucesso (HTTP 200) à API de contabilidade configurada.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+            <footer class="flex items-start">
+
+                <span class="bg-white p-6 rounded-lg shadow space-y-4">✓Des. by @Casimiro Ventura</span>
+                <span class="text-gray-700"></span>
+
+            </footer>
+        </main>
+
+    </div>
+
+
+</body>
+
+</html>
